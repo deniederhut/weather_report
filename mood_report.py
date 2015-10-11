@@ -4,6 +4,7 @@ Package for analyzing Twitter sentiment across the US. Defaults favor hourly CRO
 """
 
 import collections
+import datetime
 import json
 import time
 import os
@@ -111,23 +112,3 @@ def get_tweets(now=datetime.datetime.fromtimestamp(0), addn_query = [], pages=1,
 			pass
 		time.sleep(2)
 	return tweets
-
-def main(classifier_list=[count_dict, polar_summary]):
-	"""
-	Wrapper around get_tweets and classifier.write for the 50 most populous cities in America
-	"""
-	now = datetime.datetime.now()
-	with open('data/cities.js','r') as f:
-		cities = json.load(f)
-	for city in cities:
-		loc = cities[city][0]
-		radius = str(int(round((cities[city][1]/3.14)**.5,0)))
-		addn_query = ['geocode=' + loc + ',' + radius + 'mi']
-		tweets = ' '.join(get_tweets(now, addn_query, 10, 100))
-		for classifier in classifier_list:
-			data = classifier(city=city, now=now).classify(tweets)
-			data.write(filepath='data/counts.csv')
-
-
-if __name__ == '__main__':
-	main()

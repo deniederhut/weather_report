@@ -30,9 +30,6 @@ setup(
         'test': ['pytest'],
     },
     package_data={
-    'mood_report' = [
-    'data/cities.json',
-    'data/emo_dict.json'
-    ]
+    'mood_report' = ['data/*',]
     }
 )
