@@ -4,4 +4,4 @@
 # name and drop this file into cron.d. Alternatively, you can delete the name
 # and append this to your crontab.
 
-@hourly dillon python jaco.py
+@hourly dillon python jaco.py top_50_us counts.csv --classifiers count_dict polar_summary

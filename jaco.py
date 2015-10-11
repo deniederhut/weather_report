@@ -1,12 +1,20 @@
 #!/usr/bin/env python
 """
-CLI wrapper around get_tweets and classifier.write for the 50 most populous cities in America
+CLI wrapper around get_tweets and classifier.write
 """
 
 import argparse
 import datetime
 import json
 import mood_report
+
+parser = argparse.ArgumentParser
+parser.add_argument('cities', type=str, nargs='1', choices=['top_50_us'])
+parser.add_argument('output', type=str, nargs='1', default='counts.csv')
+parser.add_argument('--classifiers', type=str, nargs='+', required=True, choices=['count_dict', 'polar_summary'])
+args = parser.parse_args()
+args.cities = city + '.json'
+
 
 def main(cities='top_50_us.json', output='counts.csv', classifier_list=[count_dict, polar_summary]):
 	now = datetime.datetime.now()
@@ -22,4 +30,8 @@ def main(cities='top_50_us.json', output='counts.csv', classifier_list=[count_di
 			data.write(filepath=output)
 
 if __name__ == '__main__':
-    main()
+    main(
+    cities=args['cities'], 
+    output=args['output'],
+    classifiers_list=args['--classifiers']
+    )
