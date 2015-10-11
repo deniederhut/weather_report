@@ -1,0 +1,64 @@
+#!/usr/bin/env python
+"""
+Takes 240 tweets from the most populous 50 cities in the US, runs TextBlob's 
+sentiment analyzer, and writes it to a csv file in the same directory. Can 
+be called every fifteen minutes without hitting Twitter's rate limit.
+"""
+__author__ = "Dillon Niederhut"
+__version__ = "0.0.1"
+__email__ = "dillon.niederhut@gmail.com"
+
+import time
+import os
+from ast import literal_eval
+from requests.exceptions import Timeout, ConnectionError
+from requests_oauthlib import OAuth1Session
+from textblob import TextBlob
+
+API_KEY = 'imJRSDFseLeuCk0VJ5G6boUO5'
+API_SECRET = 'UWmCcEPeLW0Jky4JdYTraEHtuWHYl8Lq19Cwnveme1d0TuurST'
+DIR = '/media/dillon/dinsfire/project_bravo'
+
+def project_bravo():
+	print DIR
+	os.chdir(DIR)
+	if not os.path.isfile('city_sentiment.csv'):
+		with open('city_sentiment.csv', 'w') as f:
+			f.write('city,year,mon,mday,hour,min,sent\n')
+	twitter = OAuth1Session(API_KEY,client_secret=API_SECRET)
+	with open('cities_dict.txt','r') as f:
+		cities = literal_eval(f.read())
+	base_url = 'https://api.twitter.com/1.1/search/tweets.json'
+	base_query = '?q=lang%3Aen&result_type=recent&'
+	year = str(time.localtime()[0])
+	mon = str(time.localtime()[1])
+	mday = str(time.localtime()[2])
+	hour = str(time.localtime()[3])
+	minute = str(time.localtime()[4])
+	for city in cities.keys():
+		print city
+		tweets = list()
+		location = cities.get(city)[0]
+		print location
+		radius = str(int(round((cities.get(city)[1]/3.14)**.5,0)))
+		print radius
+		url = base_url + base_query + 'geocode=' + location + ',' + radius + 'mi'
+		print url
+		while len(tweets) < 60:
+			try:
+				r = twitter.get(url = url)
+				if r.status_code == 200:
+					for status in r.json().get('statuses'):
+						print status.get('text')
+						tweets.append(status.get('text'))
+					if r.json().get('search_metadata').get('next_results') != None:
+						url = base_url + r.json().get('search_metadata').get('next_results')
+			time.sleep(2)
+		tweets = ' '.join(tweets)
+		polarity = str(TextBlob(tweets).sentiment.polarity)
+		print polarity
+		with open('city_sentiment.csv', 'a') as f:
+			f.write(city + ',' + year + ',' + mon + ',' + mday + ',' + hour + ',' + minute + ',' + polarity + '\n')
+
+if __name__ == '__main__':
+	project_bravo()
