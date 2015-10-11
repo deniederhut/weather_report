@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 setup(
-    name='',
+    name='Mood Report',
     version='0.0.1',
     description='City-based mood tracking',
     long_description='',
@@ -30,7 +30,7 @@ setup(
         'test': ['pytest'],
     },
     package_data={
-    'project_bravo' = [
+    'mood_report' = [
     'data/cities.json',
     'data/emo_dict.json'
     ]
