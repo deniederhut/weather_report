@@ -7,16 +7,17 @@ import argparse
 import datetime
 import json
 import mood_report
+import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument('cities', type=str, choices=['top_50_us'])
 parser.add_argument('output', type=str, default='counts.csv')
 parser.add_argument('--classifiers', type=str, nargs='+', required=True, choices=['count_dict', 'polar_summary'])
 args = parser.parse_args()
-args.cities = city + '.json'
+args.cities = os.path.join('data', args.cities + '.json')
 
 
-def main(cities='top_50_us.json', output='counts.csv', classifier_list=[count_dict, polar_summary]):
+def main(cities='top_50_us.json', output='counts.csv', classifier_list=['count_dict', 'polar_summary']):
 	now = datetime.datetime.now()
 	with open(cities,'r') as f:
 		cities = json.load(f)
@@ -34,7 +35,7 @@ def main(cities='top_50_us.json', output='counts.csv', classifier_list=[count_di
 
 if __name__ == '__main__':
     main(
-    cities=args['cities'],
-    output=args['output'],
-    classifiers_list=args['--classifiers']
+    cities=args.cities,
+    output=args.output,
+    classifier_list=args.classifiers
     )
