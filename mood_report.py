@@ -11,6 +11,12 @@ import os
 from textblob import TextBlob
 from requests.exceptions import Timeout, ConnectionError
 from requests_oauthlib import OAuth1Session
+import yaml
+
+with open(os.path.join(os.getenv('HOME'), 'creds.yml')) as f:
+    creds = yaml.load(f)
+API_KEY = creds['bravo-key']
+API_SECRET = creds['bravo-secret']
 
 class classifier(object, city='Python', now=datetime.datetime.now()):
 	"""MetaClass for classifier objects"""
