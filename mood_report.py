@@ -65,7 +65,7 @@ class count_dict(classifier):
 			text = list(text)
 		for item in text:
 			for key in self.data:
-				self.data[key] = len(set(item.lower().split()) & set(self.lookup[key]))})
+				self.data[key] = len(set(item.lower().split()) & set(self.lookup[key]))
 			yield self
 
 class polar_summary(classifier):
@@ -103,7 +103,7 @@ def get_tweets(now=datetime.datetime.fromtimestamp(0), addn_query = [], pages=1,
 			r = twitter.get(url = url)
 			if r.status_code == 200:
 				for status in r.json()['statuses']:
-					if datetime.datetime.strptime(status['created_at'], '%a %b %d %H:%M:%S +0000 %Y') > (now - datetime.timedelta(1/24):
+					if datetime.datetime.strptime(status['created_at'], '%a %b %d %H:%M:%S +0000 %Y') > (now - datetime.timedelta(1/24)):
 						tweets.append(status['text'])
 				if r.json()['search_metadata']['next_results'] != None:
 					url = base_url + r.json()['search_metadata']['next_results']
