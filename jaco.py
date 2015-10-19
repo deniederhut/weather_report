@@ -8,9 +8,9 @@ import datetime
 import json
 import mood_report
 
-parser = argparse.ArgumentParser
-parser.add_argument('cities', type=str, nargs='1', choices=['top_50_us'])
-parser.add_argument('output', type=str, nargs='1', default='counts.csv')
+parser = argparse.ArgumentParser()
+parser.add_argument('cities', type=str, choices=['top_50_us'])
+parser.add_argument('output', type=str, default='counts.csv')
 parser.add_argument('--classifiers', type=str, nargs='+', required=True, choices=['count_dict', 'polar_summary'])
 args = parser.parse_args()
 args.cities = city + '.json'
