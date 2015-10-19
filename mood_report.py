@@ -40,7 +40,7 @@ class classifier(object):
 				self.now.year,
 				self.now.month,
 				self.now.day,
-				self.now.weekday,
+				self.now.weekday(),
 				self.now.hour,
 				self.__class__,
 				self.type,
