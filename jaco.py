@@ -26,12 +26,15 @@ def main(cities='top_50_us.json', output='counts.csv', classifier_list=[count_di
 		addn_query = ['geocode=' + loc + ',' + radius + 'mi']
 		tweets = ' '.join(mood_report.get_tweets(now, addn_query, 10, 100))
 		for classifier in classifier_list:
-			data = classifier(city=city, now=now).classify(tweets)
+			data = classifier()
+			data.now = now
+			data.city = city
+			data = data.classify(tweets)
 			data.write(filepath=output)
 
 if __name__ == '__main__':
     main(
-    cities=args['cities'], 
+    cities=args['cities'],
     output=args['output'],
     classifiers_list=args['--classifiers']
     )

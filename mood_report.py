@@ -18,13 +18,13 @@ with open(os.path.join(os.getenv('HOME'), 'creds.yml')) as f:
 API_KEY = creds['bravo-key']
 API_SECRET = creds['bravo-secret']
 
-class classifier(object, city='Python', now=datetime.datetime.now()):
+class classifier(object):
 	"""MetaClass for classifier objects"""
 	def __init__(self):
 		self.data = {}
 		self.type = 'meta'
-		self.now = now
-		self.city = city
+		self.now = datetime.datetime.now()
+		self.city = 'Python'
 
 	def write(self):
 		if not os.path.isfile(filepath):
