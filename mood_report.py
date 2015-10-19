@@ -26,7 +26,7 @@ class classifier(object):
 		self.now = datetime.datetime.now()
 		self.city = 'Python'
 
-	def write(self):
+	def write(self, filepath):
 		if not os.path.isfile(filepath):
 		    with open(filepath, 'w') as f:
 		        f.write(','.join([
@@ -66,7 +66,7 @@ class count_dict(classifier):
 		for item in text:
 			for key in self.data:
 				self.data[key] = len(set(item.lower().split()) & set(self.lookup[key]))
-			yield self
+		return self
 
 class polar_summary(classifier):
 	"""
@@ -86,7 +86,7 @@ class polar_summary(classifier):
 			item = TextBlob(item)
 			self.data['polarity'] = item.sentiment.polarity
 			self.data['subjectivity'] = item.sentiment.subjectivity
-			yield self
+		return self
 
 def get_tweets(now=datetime.datetime.fromtimestamp(0), addn_query = [], pages=1, limit=15):
 	"""
