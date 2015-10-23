@@ -11,20 +11,29 @@ import os
 from textblob import TextBlob
 from requests.exceptions import Timeout, ConnectionError
 from requests_oauthlib import OAuth1Session
+import yaml
 
-class classifier(object, city='Python', now=datetime.datetime.now()):
+with open(os.path.join(os.getenv('HOME'), 'creds.yml')) as f:
+    creds = yaml.load(f)
+API_KEY = creds['bravo-key']
+API_SECRET = creds['bravo-secret']
+
+class classifier(object):
 	"""MetaClass for classifier objects"""
 	def __init__(self):
 		self.data = {}
-		self.type = 'meta'
-		self.now = now
-		self.city = city
 
-	def write(self):
+	__type__ = 'meta'
+	now = datetime.datetime.now()
+	city = 'Python'
+	items = 0
+	terms = 0
+
+	def write(self, filepath):
 		if not os.path.isfile(filepath):
 		    with open(filepath, 'w') as f:
 		        f.write(','.join([
-				'city', 'year', 'month', 'mday', 'wday', 'hour', 'source', 'type', 'variable', 'value'
+				'city', 'year', 'month', 'mday', 'wday', 'hour', 'source', 'type', 'variable', 'value', 'n_items', 'n_terms'
 				]))
 		for variable in self.data:
 			with open(filepath, 'a') as f:
@@ -33,12 +42,14 @@ class classifier(object, city='Python', now=datetime.datetime.now()):
 				self.now.year,
 				self.now.month,
 				self.now.day,
-				self.now.weekday,
+				self.now.weekday(),
 				self.now.hour,
 				self.__class__,
 				self.type,
 				variable,
-				self.data[variable]
+				self.data[variable],
+				self.items,
+				self.terms
 				]]))
 
 class count_dict(classifier):
@@ -57,9 +68,11 @@ class count_dict(classifier):
 		if type(text) == tuple:
 			text = list(text)
 		for item in text:
+			self.items += 1
+			self.terms += len(item.split(' '))
 			for key in self.data:
-				self.data[key] = len(set(item.lower().split()) & set(self.lookup[key]))})
-			yield self
+				self.data[key] = len(set(item.lower().split()) & set(self.lookup[key]))
+		return self
 
 class polar_summary(classifier):
 	"""
@@ -76,10 +89,12 @@ class polar_summary(classifier):
 		if type(text) == tuple:
 			text = list(text)
 		for item in text:
+			self.items += 1
+			self.terms += len(item.split(' '))
 			item = TextBlob(item)
 			self.data['polarity'] = item.sentiment.polarity
 			self.data['subjectivity'] = item.sentiment.subjectivity
-			yield self
+		return self
 
 def get_tweets(now=datetime.datetime.fromtimestamp(0), addn_query = [], pages=1, limit=15):
 	"""
@@ -96,9 +111,9 @@ def get_tweets(now=datetime.datetime.fromtimestamp(0), addn_query = [], pages=1,
 			r = twitter.get(url = url)
 			if r.status_code == 200:
 				for status in r.json()['statuses']:
-					if datetime.datetime.strptime(status['created_at'], '%a %b %d %H:%M:%S +0000 %Y') > (now - datetime.timedelta(1/24):
+					if datetime.datetime.strptime(status['created_at'], '%a %b %d %H:%M:%S +0000 %Y') > (now - datetime.timedelta(1/24)):
 						tweets.append(status['text'])
-				if r.json()['search_metadata']['next_results'] != None:
+				if 'next_results' in r.json()['search_metadata']:
 					url = base_url + r.json()['search_metadata']['next_results']
 				else:
 					break

@@ -4,4 +4,6 @@
 # name and drop this file into cron.d. Alternatively, you can delete the name
 # and append this to your crontab.
 
-@hourly dillon python jaco.py top_50_us counts.csv --classifiers count_dict polar_summary
+PATH=/home/dillon/anaconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+@hourly dillon cd ~/mood_report; python jaco.py top_50_us data/counts.csv --classifiers count_dict polar_summary
