@@ -28,8 +28,7 @@ class classifier(object, city='Python', now=datetime.datetime.now()):
 				]))
 		for variable in self.data:
 			with open(filepath, 'a') as f:
-				f.write(','.join([str(item) for item in [
-				'\n',
+				f.write('\n' + ','.join([str(item) for item in [
 				self.city,
 				self.now.year,
 				self.now.month,
