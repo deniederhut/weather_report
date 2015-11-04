@@ -25,7 +25,7 @@ def main(cities='top_50_us.json', output='counts.csv', classifier_list=['count_d
 		loc = cities[city][0]
 		radius = str(int(round((cities[city][1]/3.14)**.5,0)))
 		addn_query = ['geocode=' + loc + ',' + radius + 'mi']
-		tweets = mood_report.get_tweets(now, addn_query, 10, 100)
+		tweets = mood_report.get_tweets(now, addn_query, 15, 100)
 		for classifier in classifier_list:
 			if classifier == 'count_dict':
 				data = mood_report.count_dict()
