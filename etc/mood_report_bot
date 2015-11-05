@@ -6,4 +6,4 @@
 
 PATH=/home/dillon/anaconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-@hourly dillon cd ~/mood_report; python jaco.py top_50_us data/counts.csv --classifiers count_dict polar_summary
+@hourly dillon cd ~/mood_report; python jaco.py top_10_us data/counts.csv --classifiers count_dict polar_summary
