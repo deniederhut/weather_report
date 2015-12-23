@@ -6,8 +6,8 @@ CLI wrapper around get_tweets and classifier.write
 import argparse
 import datetime
 import json
-import mood_report
 import os
+import weather_report
 
 parser = argparse.ArgumentParser()
 parser.add_argument('cities', type=str, choices=['top_50_us'])
