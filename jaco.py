@@ -7,6 +7,7 @@ import datetime
 import json
 import os
 import weather_report
+import yaml
 
 class Jaco(object):
 

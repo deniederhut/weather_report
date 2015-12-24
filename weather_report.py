@@ -11,7 +11,6 @@ import os
 from textblob import TextBlob
 from requests.exceptions import Timeout, ConnectionError
 from requests_oauthlib import OAuth1Session
-import yaml
 
 class classifier(object):
 	"""MetaClass for classifier objects"""
