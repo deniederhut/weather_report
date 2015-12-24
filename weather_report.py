@@ -13,11 +13,6 @@ from requests.exceptions import Timeout, ConnectionError
 from requests_oauthlib import OAuth1Session
 import yaml
 
-with open(os.path.join(os.getenv('HOME'), 'creds.yml')) as f:
-    creds = yaml.load(f)
-API_KEY = creds['bravo-key']
-API_SECRET = creds['bravo-secret']
-
 class classifier(object):
 	"""MetaClass for classifier objects"""
 	def __init__(self):
@@ -96,33 +91,41 @@ class polar_summary(classifier):
 			self.data['subjectivity'] = item.sentiment.subjectivity
 		return self
 
-def get_tweets(now=datetime.datetime.fromtimestamp(0), addn_query = [], pages=1, limit=15):
-	"""
-	Gets recent en status updates from Twitter matching additional queries not older than a datetime object
-	"""
-	twitter = OAuth1Session(API_KEY,client_secret=API_SECRET)
-	base_url = 'https://api.twitter.com/1.1/search/tweets.json'
-	query_base = '?q=lang%3Aen&result_type=recent&count=' + str(limit) + '&'
-	i = 0
-	tweets = []
-	url = base_url + query_base + '&'.join(addn_query)
-	while i < pages:
-		try:
-			r = twitter.get(url = url)
-			if r.status_code == 200:
-				for status in r.json()['statuses']:
-					if datetime.datetime.strptime(status['created_at'], '%a %b %d %H:%M:%S +0000 %Y') > (now - datetime.timedelta(1/24)):
-						tweets.append(status['text'])
-				if 'next_results' in r.json()['search_metadata']:
-					url = base_url + r.json()['search_metadata']['next_results']
-				else:
-					break
-			if r.status_code == 429:
-				time.sleep(300)
-			i += 1
-		except ConnectionError:
-			pass
-		except Timeout:
-			pass
-		time.sleep(2)
-	return tweets
+class tweetReader(object):
+    """Gets tweets matching params with api key and secret"""
+
+    tweets = []
+    base_url = 'https://api.twitter.com/1.1/search/tweets.json'
+
+    def __init__(self, api_key, api_secret):
+        self.t = OAuth1Session(api_key,client_secret=api_secret)
+
+    def get(self, lang='en', result_type='recent', pages=1, limit=15, now=datetime.datetime.fromtimestamp(0), **kwargs):
+    	"""
+    	Gets recent status updates from Twitter matching
+        additional queries not older than a datetime object
+    	"""
+        search_url = self.base_url + '?q=lang%3A{}&result_type={}&count={}'.format(language, result_type, str(limit))
+        if kwargs:
+            search_url += '&' + '&'.join(['='.join(item) for item in kwargs.items()])
+    	i = 0
+    	while i < pages:
+    		try:
+    			r = self.t.get(url=search_url)
+    			if r.status_code == 200:
+    				for status in r.json()['statuses']:
+    					if datetime.datetime.strptime(status['created_at'], '%a %b %d %H:%M:%S +0000 %Y') > now:
+    						self.tweets.append(status['text'])
+    				if 'next_results' in r.json()['search_metadata']:
+    					search_url = self.base_url + r.json()['search_metadata']['next_results']
+    				else:
+    					break
+    			if r.status_code == 429:
+    				time.sleep(60)
+    			i += 1
+    		except ConnectionError:
+    			pass
+    		except Timeout:
+    			pass
+    		time.sleep(2)
+    	return self.tweets
