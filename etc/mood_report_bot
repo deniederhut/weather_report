@@ -1,9 +1,0 @@
-#!/bin/bash
-
-# If you want to run this as a cron job, change the name below to your user
-# name and drop this file into cron.d. Alternatively, you can delete the name
-# and append this to your crontab.
-
-PATH=/home/dillon/anaconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
-@hourly dillon cd ~/mood_report; python jaco.py top_10_us data/counts.csv --classifiers count_dict polar_summary

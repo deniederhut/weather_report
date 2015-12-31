@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
+from distutils.core import setup
+
 setup(
-    name='Mood Report',
+    name='Weather Report',
     version='0.0.2',
-    description='City-based mood tracking',
+    description='Location-based sentiment analysis',
     long_description='',
     url='',
     author='Dillon Niederhut',
@@ -18,18 +20,8 @@ setup(
         'Programming Language :: Python :: 3.5',
     ],
     keywords='spatial, emotion, classifier',
-    packages=find_packages(exclude=['contrib', 'docs', '*test*']),
-    install_requires=[
-                    'datetime',
-                    'json',
-                    'os',
-                    'requests_oauthlib',
-                    'yaml'
-                    ],
-    extras_require={
-        'test': ['pytest'],
-    },
+    packages=['weather_report'],
     package_data={
-    'mood_report' = ['data/*',]
+    'mood_report' : ['data/*',]
     }
 )
