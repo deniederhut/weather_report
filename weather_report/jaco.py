@@ -15,8 +15,8 @@ class Jaco(object):
         with open(credsfile, 'r') as f:
             self.key = yaml.load(f).get(key_name)
             self.secret = yaml.load(f).get(secret_name)
-    	with open(cities,'r') as f:
-    		self.cities = json.load(f)
+        with open(cities,'r') as f:
+            self.cities = json.load(f)
         self.output=output
         self.classifier_list = classifier_list
 
@@ -25,23 +25,23 @@ class Jaco(object):
         return city[0], str(int(round((city[1]/3.14)**.5,0)))
 
     def run(self):
-    	for city in self.cities:
-    		loc, radius = city_attrs(city)
-    		query = {'geocode' : loc + ',' + radius + 'mi'}
+        for city in self.cities:
+            loc, radius = city_attrs(city)
+            query = {'geocode' : loc + ',' + radius + 'mi'}
             tweetReader = weather_report.tweetReader(self.key, self.secret)
-    		tweets = tweetReader.get(now=now, pages=50, limit=100, **query)
-    		for classifier in classifier_list:
-    			if classifier == 'count_dict':
-    				data = weather_report.count_dict()
-    			if classifier == 'polar_summary':
-    				data = weather_report.polar_summary()
-    			data.now = now
-    			data.city = city
-    			data = data.classify(tweets)
-    			data.write(filepath=output)
+            tweets = tweetReader.get(now=now, pages=50, limit=100, **query)
+            for classifier in classifier_list:
+                if classifier == 'count_dict':
+                    data = weather_report.count_dict()
+                if classifier == 'polar_summary':
+                    data = weather_report.polar_summary()
+                data.now = now
+                data.city = city
+                data = data.classify(tweets)
+                data.write(filepath=output)
 
 def main(cities='top_50_us.json', output='counts.csv', classifier_list=['count_dict', 'polar_summary']):
-	now = datetime.datetime.now() - datetime.timedelta(1/24)
+    now = datetime.datetime.now() - datetime.timedelta(1/24)
 
 
 
