@@ -8,6 +8,7 @@ import datetime
 import json
 import time
 import os
+from pkg_resources import resource_string
 from textblob import TextBlob
 from requests.exceptions import Timeout, ConnectionError
 from requests_oauthlib import OAuth1Session
@@ -49,8 +50,8 @@ class classifier(object):
 class count_dict(classifier):
     """A simple dictionary method for mood analysis"""
     def __init__(self):
-        with open('data/emo_dict.json', 'r') as f:
-            lookup = json.load(f)
+        f = resource_string(__name__, 'data/emo_dict.json')
+        lookup = json.loads(f.decode('utf-8'))
         self.data = {key:0 for key in lookup}
         self.lookup = lookup
         self.type = 'count'

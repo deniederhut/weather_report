@@ -19,9 +19,16 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
+    requires=[
+                'datetime',
+                'json',
+                'os',
+                'requests_oauthlib',
+                'yaml'
+                ],
     keywords='spatial, emotion, classifier',
     packages=['weather_report'],
     package_data={
-    'mood_report' : ['data/*',]
+    'weather_report' : ['data/*',]
     }
 )
