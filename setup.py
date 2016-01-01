@@ -27,7 +27,7 @@ setup(
                 'yaml'
                 ],
     keywords='spatial, emotion, classifier',
-    packages=['Bots', 'Classifiers', 'Readers'],
+    packages=['weather_report'],
     package_data={
     'weather_report' : ['data/*',]
     }
