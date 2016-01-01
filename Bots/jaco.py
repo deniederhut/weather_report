@@ -6,7 +6,7 @@ CLI wrapper around get_tweets and classifier.write
 import datetime
 import json
 import os
-import weather_report
+from weather_report import Classifiers, Readers
 import yaml
 
 class Jaco(object):
@@ -28,22 +28,17 @@ class Jaco(object):
         for city in self.cities:
             loc, radius = city_attrs(city)
             query = {'geocode' : loc + ',' + radius + 'mi'}
-            tweetReader = weather_report.tweetReader(self.key, self.secret)
+            tweetReader = Readers.tweetReader(self.key, self.secret)
             tweets = tweetReader.get(now=now, pages=50, limit=100, **query)
             for classifier in classifier_list:
                 if classifier == 'count_dict':
-                    data = weather_report.count_dict()
+                    data = Classifiers.count_dict()
                 if classifier == 'polar_summary':
-                    data = weather_report.polar_summary()
+                    data = Classifiers.polar_summary()
                 data.now = now
                 data.city = city
                 data = data.classify(tweets)
                 data.write(filepath=output)
-
-def main(cities='top_50_us.json', output='counts.csv', classifier_list=['count_dict', 'polar_summary']):
-    now = datetime.datetime.now() - datetime.timedelta(1/24)
-
-
 
 if __name__ == '__main__':
     import argparse
