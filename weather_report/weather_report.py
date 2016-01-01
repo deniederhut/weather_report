@@ -66,7 +66,7 @@ class count_dict(classifier):
             self.items += 1
             self.terms += len(item.split(' '))
             for key in self.data:
-                self.data[key] = len(set(item.lower().split()) & set(self.lookup[key]))
+                self.data[key] += len(set(item.lower().split()) & set(self.lookup[key]))
         return self
 
 class polar_summary(classifier):
@@ -87,8 +87,8 @@ class polar_summary(classifier):
             self.items += 1
             self.terms += len(item.split(' '))
             item = TextBlob(item)
-            self.data['polarity'] = item.sentiment.polarity
-            self.data['subjectivity'] = item.sentiment.subjectivity
+            self.data['polarity'] = self.data['polarity'] * self.items/(self.items+1) + item.sentiment.polarity / (self.items+1)
+            self.data['subjectivity'] = self.data['subjectivity'] * self.items/(self.items+1) + item.sentiment.subjectivity / (self.items+1)
         return self
 
 class tweetReader(object):
