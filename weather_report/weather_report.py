@@ -100,7 +100,7 @@ class tweetReader(object):
     def __init__(self, api_key, api_secret):
         self.t = OAuth1Session(api_key,client_secret=api_secret)
 
-    def get(self, lang='en', result_type='recent', pages=1, limit=15, now=datetime.datetime.fromtimestamp(0), **kwargs):
+    def get(self, language='en', result_type='recent', pages=1, limit=15, now=datetime.datetime.fromtimestamp(0), **kwargs):
         """
         Gets recent status updates from Twitter matching
         additional queries not older than a datetime object
