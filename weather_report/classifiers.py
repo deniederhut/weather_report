@@ -12,7 +12,7 @@ from pkg_resources import resource_string
 from textblob import TextBlob
 
 
-class classifier(object):
+class Classifier(object):
     """MetaClass for classifier objects"""
     def __init__(self):
         self.data = {}
@@ -46,7 +46,7 @@ class classifier(object):
                 self.terms
                 ]]))
 
-class count_dict(classifier):
+class CountDict(Classifier):
     """A simple dictionary method for mood analysis"""
     def __init__(self):
         f = resource_string(__name__, 'data/emo_dict.json')
@@ -68,7 +68,7 @@ class count_dict(classifier):
                 self.data[key] += len(set(item.lower().split()) & set(self.lookup[key]))
         return self
 
-class polar_summary(classifier):
+class PolarSummary(Classifier):
     """
     A summary of sentiment and subjectivity using pattern's classifier (via TextBlob)
     """
