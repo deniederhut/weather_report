@@ -3,7 +3,7 @@ Title : Weather Report
 Author : Dillon Niederhut
 ---
 
-[![Build Status](https://travis-ci.org/deniederhut/weather_report.svg?branch=master)](https://travis-ci.org/deniederhut/weather_report)
+[![DOI](https://zenodo.org/badge/18094/deniederhut/weather_report.svg)](https://zenodo.org/badge/latestdoi/18094/deniederhut/weather_report)  [![Build Status](https://travis-ci.org/deniederhut/weather_report.svg?branch=master)](https://travis-ci.org/deniederhut/weather_report)
 
 ## Description
 
