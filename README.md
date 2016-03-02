@@ -37,6 +37,6 @@ Pythopolis,2016,3,2,2,11,<class 'weather_report.classifiers.CountDict'>,count,af
 Pythopolis,2016,3,2,2,11,<class 'weather_report.classifiers.CountDict'>,count,happy,1,1,12
 ```
 
-
+---
 
 * 1. For more on Berkeley Mood, see the [D-Lab blog post](http://dlab.berkeley.edu/blog/berkeley-mood-twitter-and-python)
