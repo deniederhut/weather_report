@@ -6,7 +6,7 @@ CLI wrapper around get_tweets and classifier.write
 import datetime
 import json
 import os
-from weather_report import Classifiers, Readers
+from weather_report import classifiers, readers
 import yaml
 
 class Jaco(object):
