@@ -11,4 +11,23 @@ install :
     - pip install -r requirements.txt
     - python setup.py install
 
+matrix :
+    include :
+        - os : linux
+          dist : precise
+          sudo : required
+          python : 3.4
+        - os : linux
+          dist : trusty
+          sudo : required
+          python : 3.4
+        - os : linux
+          dist : precise
+          sudo : required
+          python : 3.5
+        - os : linux
+          dist : trusty
+          sudo : required
+          python : 3.5
+
 script : py.test
