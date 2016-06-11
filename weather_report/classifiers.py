@@ -131,10 +131,12 @@ class WordNetDict(Classifier):
 
     def update_from_path(self, path):
         index = path.index(self.emotion)
-        try:
+        if len(path) > index + 2:
             self.inc(self.name_from_synset(path[index + 2]))
-        except IndexError:
+        elif len(path) > index + 1:
             self.inc(self.name_from_synset(path[index + 1]))
+        else:
+            pass
 
     def inc(self, key):
         if key in self.data:
