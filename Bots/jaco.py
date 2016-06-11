@@ -32,9 +32,11 @@ class Jaco(object):
             tweets = tweetReader.get(now=now, pages=50, limit=100, **query)
             for classifier in classifier_list:
                 if classifier == 'count_dict':
-                    data = Classifiers.count_dict()
+                    data = classifiers.CountDict()
                 if classifier == 'polar_summary':
-                    data = Classifiers.polar_summary()
+                    data = classifiers.PolarSummary()
+                if classifier == 'wordnet_dict':
+                    data = classifiers.WordNetClassifier()
                 data.now = now
                 data.city = city
                 data = data.classify(tweets)
@@ -52,7 +54,7 @@ if __name__ == '__main__':
     parser.add_argument('output', type=str, default='counts.csv')
     parser.add_argument('--classifiers', type=str,
         nargs='+', required=True,
-        choices=['count_dict', 'polar_summary'])
+        choices=['count_dict', 'polar_summary', 'wordnet_dict'])
 
     args = parser.parse_args()
     args.cities = os.path.join('data', args.cities + '.json')
