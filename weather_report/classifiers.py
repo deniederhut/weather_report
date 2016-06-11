@@ -50,6 +50,10 @@ class Classifier(object):
 
 class CountDict(Classifier):
     """A simple dictionary method for mood analysis"""
+
+    def __class__(self):
+        return "CountDict"
+
     def __init__(self):
         f = resource_string(__name__, 'data/emo_dict.json')
         lookup = json.loads(f.decode('utf-8'))
@@ -74,6 +78,10 @@ class PolarSummary(Classifier):
     """
     A summary of sentiment and subjectivity using pattern's classifier (via TextBlob)
     """
+
+    def __class__(self):
+        return "PolarSummary"
+
     def __init__(self):
         self.data = {'polarity':0, 'subjectivity':0}
         self.type = 'polarity'
@@ -96,6 +104,9 @@ class WordNetDict(Classifier):
     """
     Unsupervised mood extraction using WordNet's hypernym paths
     """
+
+    def __class__(self):
+        return "WordNetDict"
 
     def __init__(self):
         self.data = {}
