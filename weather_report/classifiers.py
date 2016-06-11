@@ -6,10 +6,12 @@ Sentiment classifiers
 import collections
 import datetime
 import json
-import time
+from nltk import word_tokenize
+from nltk.corpus import wordnet as wn
 import os
 from pkg_resources import resource_string
 from textblob import TextBlob
+import time
 
 
 class Classifier(object):
@@ -89,3 +91,46 @@ class PolarSummary(Classifier):
             self.data['polarity'] = self.data['polarity'] * self.items/(self.items+1) + item.sentiment.polarity / (self.items+1)
             self.data['subjectivity'] = self.data['subjectivity'] * self.items/(self.items+1) + item.sentiment.subjectivity / (self.items+1)
         return self
+
+class WordNetDict(Classifier):
+    """
+    Unsupervised mood extraction using WordNet's hypernym paths
+    """
+
+    def __init__(self):
+        self.data = {}
+        self.type = 'count'
+        self.emotion = wn.synset('emotion.n.01')
+
+    def classify(self, text):
+        """Count number/kind of emotion terms"""
+        if type(text) == str:
+            text = [text]
+        if type(text) == tuple:
+            text = list(text)
+        for item in text:
+            self.items += 1
+            self.terms += len(item.split())
+            for term in word_tokenize(item):
+                for syn in wn.synsets(term):
+                    for path in syn.hypernym_paths():
+                        if self.emotion in path:
+                            self.update_from_path(path)
+        return self
+
+    def update_from_path(self, path):
+        index = path.index(self.emotion)
+        try:
+            self.inc(self.name_from_synset(path[index + 2]))
+        except IndexError:
+            self.inc(self.name_from_synset(path[index + 1]))
+
+    def inc(self, key):
+        if key in self.data:
+            self.data[key] += 1
+        else:
+            self.data.update({key : 1})
+
+    @staticmethod
+    def name_from_synset(syn):
+        return syn.name().split('.')[0]
