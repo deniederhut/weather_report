@@ -144,4 +144,4 @@ class WordNetDict(Classifier):
 
     @staticmethod
     def name_from_synset(syn):
-        return syn.name().split('.')[0]
+        return syn.name().split('.')[0].replace('_', ' ')
