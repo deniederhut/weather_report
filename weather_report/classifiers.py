@@ -133,8 +133,6 @@ class WordNetDict(Classifier):
         index = path.index(self.emotion)
         if len(path) > index + 2:
             self.inc(self.name_from_synset(path[index + 2]))
-        elif len(path) > index + 1:
-            self.inc(self.name_from_synset(path[index + 1]))
         else:
             pass
 
